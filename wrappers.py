@@ -5,6 +5,7 @@ from skimage import transform
 
 from gym.spaces import Box
 
+
 class ResizeObservation(gym.ObservationWrapper):
     def __init__(self, env, shape):
         super().__init__(env)
