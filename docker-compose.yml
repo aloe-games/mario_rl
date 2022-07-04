@@ -1,6 +1,0 @@
-services:
-  code:
-    build: .
-    runtime: nvidia
-    volumes:
-      - .:/code
