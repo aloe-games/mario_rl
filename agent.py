@@ -7,7 +7,7 @@ from collections import deque
 
 
 class Mario:
-    def __init__(self, state_dim, action_dim, save_dir, checkpoint=None):
+    def __init__(self, state_dim, action_dim, save_dir=None, checkpoint=None):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.memory = deque(maxlen=100000)
@@ -26,7 +26,7 @@ class Mario:
         self.save_every = 5e5  # no. of experiences between saving Mario Net
         self.save_dir = save_dir
 
-        self.use_cuda = torch.cuda.is_available()
+        self.use_cuda = False
 
         # Mario's DNN to predict the most optimal action - we implement this in the Learn section
         self.net = MarioNet(self.state_dim, self.action_dim).float()
@@ -178,14 +178,15 @@ class Mario:
         return (td_est.mean().item(), loss)
 
     def save(self):
-        save_path = (
-            self.save_dir / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
-        )
-        torch.save(
-            dict(model=self.net.state_dict(), exploration_rate=self.exploration_rate),
-            save_path,
-        )
-        print(f"MarioNet saved to {save_path} at step {self.curr_step}")
+        if self.save_dir is not None:
+            save_path = (
+                self.save_dir / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
+            )
+            torch.save(
+                dict(model=self.net.state_dict(), exploration_rate=self.exploration_rate),
+                save_path,
+            )
+            print(f"MarioNet saved to {save_path} at step {self.curr_step}")
 
     def load(self, load_path):
         if not load_path.exists():
