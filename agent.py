@@ -26,7 +26,7 @@ class Mario:
         self.save_every = 5e5  # no. of experiences between saving Mario Net
         self.save_dir = save_dir
 
-        self.use_cuda = False
+        self.use_cuda = torch.cuda.is_available()
 
         # Mario's DNN to predict the most optimal action - we implement this in the Learn section
         self.net = MarioNet(self.state_dim, self.action_dim).float()
@@ -81,31 +81,11 @@ class Mario:
         reward (float),
         done(bool))
         """
-        state = (
-            torch.FloatTensor(state).cuda()
-            if self.use_cuda
-            else torch.FloatTensor(state)
-        )
-        next_state = (
-            torch.FloatTensor(next_state).cuda()
-            if self.use_cuda
-            else torch.FloatTensor(next_state)
-        )
-        action = (
-            torch.LongTensor([action]).cuda()
-            if self.use_cuda
-            else torch.LongTensor([action])
-        )
-        reward = (
-            torch.DoubleTensor([reward]).cuda()
-            if self.use_cuda
-            else torch.DoubleTensor([reward])
-        )
-        done = (
-            torch.BoolTensor([done]).cuda()
-            if self.use_cuda
-            else torch.BoolTensor([done])
-        )
+        state = torch.FloatTensor(state)
+        next_state = torch.FloatTensor(next_state)
+        action = torch.LongTensor([action])
+        reward = torch.DoubleTensor([reward])
+        done = torch.BoolTensor([done])
 
         self.memory.append(
             (
@@ -123,6 +103,8 @@ class Mario:
         """
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
+        if self.use_cuda:
+            state, next_state, action, reward, done = state.cuda(), next_state.cuda(), action.cuda(), reward.cuda(), done.cuda()
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
 
     def td_estimate(self, state, action):
