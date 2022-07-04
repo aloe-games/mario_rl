@@ -105,7 +105,13 @@ class Mario:
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
         if self.use_cuda:
-            state, next_state, action, reward, done = state.cuda(), next_state.cuda(), action.cuda(), reward.cuda(), done.cuda()
+            state, next_state, action, reward, done = (
+                state.cuda(),
+                next_state.cuda(),
+                action.cuda(),
+                reward.cuda(),
+                done.cuda(),
+            )
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
 
     def td_estimate(self, state, action):
@@ -163,10 +169,13 @@ class Mario:
     def save(self):
         if self.save_dir is not None:
             save_path = (
-                self.save_dir / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
+                self.save_dir
+                / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
             )
             torch.save(
-                dict(model=self.net.state_dict(), exploration_rate=self.exploration_rate),
+                dict(
+                    model=self.net.state_dict(), exploration_rate=self.exploration_rate
+                ),
                 save_path,
             )
             print(f"MarioNet saved to {save_path} at step {self.curr_step}")
