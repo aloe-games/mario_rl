@@ -53,6 +53,7 @@ class Mario:
 
         # EXPLOIT
         else:
+            state = np.array(state)
             state = (
                 torch.FloatTensor(state).cuda()
                 if self.use_cuda
@@ -81,8 +82,8 @@ class Mario:
         reward (float),
         done(bool))
         """
-        state = torch.FloatTensor(state)
-        next_state = torch.FloatTensor(next_state)
+        state = torch.FloatTensor(np.array(state))
+        next_state = torch.FloatTensor(np.array(next_state))
         action = torch.LongTensor([action])
         reward = torch.DoubleTensor([reward])
         done = torch.BoolTensor([done])
