@@ -7,7 +7,7 @@ from nes_py.wrappers import JoypadSpace
 from agent import Mario
 from wrappers import ResizeObservation, SkipFrame
 
-env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0")
+env = gym_super_mario_bros.make("SuperMarioBros-1-1-v3")
 env = JoypadSpace(env, [["right"], ["right", "A"]])
 
 env = SkipFrame(env, skip=4)
