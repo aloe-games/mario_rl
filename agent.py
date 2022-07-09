@@ -1,7 +1,7 @@
-import numpy as np
 import random
 from collections import deque
 
+import numpy as np
 import torch
 
 from neural import MarioNet

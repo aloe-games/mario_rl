@@ -11,7 +11,7 @@ class CutObservation(gym.ObservationWrapper):
         self.observation_space = Box(low=0, high=255, shape=self.shape, dtype=np.uint8)
 
     def observation(self, observation):
-        return observation[140 : 140 + 84, 86 : 86 + 84]
+        return observation[140: 140 + 84, 86: 86 + 84]
 
 
 class SkipFrame(gym.Wrapper):
