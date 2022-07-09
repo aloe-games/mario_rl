@@ -3,7 +3,7 @@ from pathlib import Path
 from agent import Mario
 from env import build_env
 
-env = build_env("SuperMarioBros-1-1-v3")
+env = build_env()
 
 checkpoint = Path("checkpoints/trained_mario.chkpt")
 mario = Mario(

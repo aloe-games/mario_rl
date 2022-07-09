@@ -5,7 +5,7 @@ from agent import Mario
 from env import build_env
 from metrics import MetricLogger
 
-env = build_env("SuperMarioBros-1-1-v3")
+env = build_env()
 
 save_dir = Path("checkpoints") / datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 save_dir.mkdir(parents=True)

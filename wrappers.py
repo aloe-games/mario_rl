@@ -12,7 +12,7 @@ class CutAndScaleObservation(gym.ObservationWrapper):
         self.observation_space = Box(low=0, high=255, shape=self.shape, dtype=np.uint8)
 
     def observation(self, observation):
-        resize_obs = transform.resize(observation[140: 140 + 84, 128: 128 + 84], (21, 21))
+        resize_obs = transform.resize(observation[120:, 128:], (21, 21))
         resize_obs *= 255
         resize_obs = resize_obs.astype(np.uint8)
         return resize_obs

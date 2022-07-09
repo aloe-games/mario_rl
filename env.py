@@ -5,8 +5,8 @@ from nes_py.wrappers import JoypadSpace
 from wrappers import CutAndScaleObservation, SkipFrame
 
 
-def build_env(name):
-    env = gym_super_mario_bros.make(name)
+def build_env():
+    env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0")
     env = JoypadSpace(env, [["right"], ["right", "A"]])
 
     env = SkipFrame(env, skip=4)
