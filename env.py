@@ -2,7 +2,7 @@ import gym_super_mario_bros
 from gym.wrappers import FrameStack, GrayScaleObservation, TransformObservation
 from nes_py.wrappers import JoypadSpace
 
-from wrappers import CutObservation, SkipFrame
+from wrappers import CutAndScaleObservation, SkipFrame
 
 
 def build_env(name):
@@ -11,7 +11,7 @@ def build_env(name):
 
     env = SkipFrame(env, skip=4)
     env = GrayScaleObservation(env, keep_dim=False)
-    env = CutObservation(env)
+    env = CutAndScaleObservation(env)
     env = TransformObservation(env, f=lambda x: x / 255.0)
     env = FrameStack(env, num_stack=4)
 

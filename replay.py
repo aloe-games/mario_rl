@@ -7,7 +7,7 @@ env = build_env("SuperMarioBros-1-1-v3")
 
 checkpoint = Path("checkpoints/trained_mario.chkpt")
 mario = Mario(
-    state_dim=(4, 84, 84),
+    state_dim=(4, 21, 21),
     action_dim=env.action_space.n,
     checkpoint=checkpoint,
 )

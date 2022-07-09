@@ -2,16 +2,20 @@ import gym
 import numpy as np
 
 from gym.spaces import Box
+from skimage import transform
 
 
-class CutObservation(gym.ObservationWrapper):
+class CutAndScaleObservation(gym.ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.shape = (84, 84)
+        self.shape = (21, 21)
         self.observation_space = Box(low=0, high=255, shape=self.shape, dtype=np.uint8)
 
     def observation(self, observation):
-        return observation[140: 140 + 84, 86: 86 + 84]
+        resize_obs = transform.resize(observation[140: 140 + 84, 128: 128 + 84], (21, 21))
+        resize_obs *= 255
+        resize_obs = resize_obs.astype(np.uint8)
+        return resize_obs
 
 
 class SkipFrame(gym.Wrapper):

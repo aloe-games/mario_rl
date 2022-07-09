@@ -11,7 +11,7 @@ save_dir = Path("checkpoints") / datetime.datetime.now().strftime("%Y-%m-%dT%H-%
 save_dir.mkdir(parents=True)
 
 mario = Mario(
-    state_dim=(4, 84, 84),
+    state_dim=(4, 21, 21),
     action_dim=env.action_space.n,
     save_dir=save_dir,
 )
