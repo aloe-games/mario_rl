@@ -1,9 +1,10 @@
+import numpy as np
+import random
+from collections import deque
+
 import torch
-import random, numpy as np
-from pathlib import Path
 
 from neural import MarioNet
-from collections import deque
 
 
 class Mario:
@@ -26,12 +27,8 @@ class Mario:
         self.save_every = 5e5  # no. of experiences between saving Mario Net
         self.save_dir = save_dir
 
-        self.use_cuda = torch.cuda.is_available()
-
         # Mario's DNN to predict the most optimal action - we implement this in the Learn section
         self.net = MarioNet(self.state_dim, self.action_dim).float()
-        if self.use_cuda:
-            self.net = self.net.to(device="cuda")
         if checkpoint:
             self.load(checkpoint)
 
@@ -53,12 +50,7 @@ class Mario:
 
         # EXPLOIT
         else:
-            state = np.array(state)
-            state = (
-                torch.FloatTensor(state).cuda()
-                if self.use_cuda
-                else torch.FloatTensor(state)
-            )
+            state = torch.FloatTensor(np.array(state))
             state = state.unsqueeze(0)
             action_values = self.net(state, model="online")
             action_idx = torch.argmax(action_values, axis=1).item()
@@ -104,14 +96,6 @@ class Mario:
         """
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
-        if self.use_cuda:
-            state, next_state, action, reward, done = (
-                state.cuda(),
-                next_state.cuda(),
-                action.cuda(),
-                reward.cuda(),
-                done.cuda(),
-            )
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
 
     def td_estimate(self, state, action):
@@ -184,7 +168,7 @@ class Mario:
         if not load_path.exists():
             raise ValueError(f"{load_path} does not exist")
 
-        ckp = torch.load(load_path, map_location=("cuda" if self.use_cuda else "cpu"))
+        ckp = torch.load(load_path)
         exploration_rate = ckp.get("exploration_rate")
         state_dict = ckp.get("model")
 
