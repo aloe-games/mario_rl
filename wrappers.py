@@ -1,28 +1,17 @@
 import gym
-import torch
-import random, datetime, numpy as np
-from skimage import transform
+import numpy as np
 
 from gym.spaces import Box
 
 
-class ResizeObservation(gym.ObservationWrapper):
-    def __init__(self, env, shape):
+class CutObservation(gym.ObservationWrapper):
+    def __init__(self, env):
         super().__init__(env)
-        if isinstance(shape, int):
-            self.shape = (shape, shape)
-        else:
-            self.shape = tuple(shape)
-
-        obs_shape = self.shape + self.observation_space.shape[2:]
-        self.observation_space = Box(low=0, high=255, shape=obs_shape, dtype=np.uint8)
+        self.shape = (84, 84)
+        self.observation_space = Box(low=0, high=255, shape=self.shape, dtype=np.uint8)
 
     def observation(self, observation):
-        resize_obs = transform.resize(observation, self.shape)
-        # cast float back to uint8
-        resize_obs *= 255
-        resize_obs = resize_obs.astype(np.uint8)
-        return resize_obs
+        return observation[140 : 140 + 84, 86 : 86 + 84]
 
 
 class SkipFrame(gym.Wrapper):
