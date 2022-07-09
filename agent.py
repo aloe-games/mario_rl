@@ -11,7 +11,7 @@ class Mario:
     def __init__(self, state_dim, action_dim, save_dir=None, checkpoint=None):
         self.state_dim = state_dim
         self.action_dim = action_dim
-        self.memory = deque(maxlen=25000)
+        self.memory = deque(maxlen=100000)
         self.batch_size = 32
 
         self.exploration_rate = 1
