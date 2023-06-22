@@ -85,11 +85,31 @@ class Mario:
         """
         state = np.array(state)
         next_state = np.array(next_state)
-        state = torch.FloatTensor(state).cuda() if self.use_cuda else torch.FloatTensor(state)
-        next_state = torch.FloatTensor(next_state).cuda() if self.use_cuda else torch.FloatTensor(next_state)
-        action = torch.LongTensor([action]).cuda() if self.use_cuda else torch.LongTensor([action])
-        reward = torch.DoubleTensor([reward]).cuda() if self.use_cuda else torch.DoubleTensor([reward])
-        done = torch.BoolTensor([done]).cuda() if self.use_cuda else torch.BoolTensor([done])
+        state = (
+            torch.FloatTensor(state).cuda()
+            if self.use_cuda
+            else torch.FloatTensor(state)
+        )
+        next_state = (
+            torch.FloatTensor(next_state).cuda()
+            if self.use_cuda
+            else torch.FloatTensor(next_state)
+        )
+        action = (
+            torch.LongTensor([action]).cuda()
+            if self.use_cuda
+            else torch.LongTensor([action])
+        )
+        reward = (
+            torch.DoubleTensor([reward]).cuda()
+            if self.use_cuda
+            else torch.DoubleTensor([reward])
+        )
+        done = (
+            torch.BoolTensor([done]).cuda()
+            if self.use_cuda
+            else torch.BoolTensor([done])
+        )
 
         self.memory.append((state, next_state, action, reward, done))
 
@@ -156,8 +176,8 @@ class Mario:
     def save(self):
         if self.save_dir is not None:
             save_path = (
-                    self.save_dir
-                    / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
+                self.save_dir
+                / f"mario_net_{int(self.curr_step // self.save_every)}.chkpt"
             )
             torch.save(
                 dict(
