@@ -3,3 +3,4 @@ gym-super-mario-bros==7.4.0
 opencv-python==4.7.0.72
 scikit-image==0.21.0
 torch==2.0.1
+numpy==1.26.4
